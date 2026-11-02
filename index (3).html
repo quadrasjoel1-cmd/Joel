@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your evening has been taken care of</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #17140F;
+    --panel: #1E1A14;
+    --yellow: #FFC900;
+    --cream: #FFF4D1;
+    --beige: #BDB394;
+    --ink: #17140F;
+    --ink-soft: rgba(23, 20, 15, 0.6);
+    --line: rgba(23, 20, 15, 0.28);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .screen {
+    width: 100%;
+    max-width: 440px;
+    background: var(--panel);
+    border-radius: 22px;
+    padding: 20px 16px 16px;
+  }
+  h1 {
+    font-weight: 900;
+    font-size: clamp(21px, 5.6vw, 25px);
+    line-height: 1.12;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    color: var(--cream);
+    padding: 0 2px 14px;
+  }
+
+  /* ticket */
+  .ticket {
+    position: relative;
+    background: var(--yellow);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 6px 12px 18px;
+    overflow: hidden;
+  }
+  .sep {
+    position: relative;
+    height: 0;
+    border-top: 1.5px solid var(--line);
+    margin: 14px -12px;
+  }
+  .sep.cut::before, .sep.cut::after {
+    content: "";
+    position: absolute;
+    top: -11px;
+    width: 22px; height: 22px;
+    background: var(--panel);
+    border-radius: 50%;
+  }
+  .sep.cut::before { left: -11px; }
+  .sep.cut::after  { right: -11px; }
+
+  .label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .value {
+    font-weight: 900;
+    font-size: clamp(15px, 4.2vw, 17px);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* route */
+  .route { position: relative; padding-top: 6px; }
+  .stop {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    column-gap: 8px;
+    align-items: start;
+    position: relative;
+  }
+  .stop svg { width: 18px; height: 18px; margin-top: 9px; }
+  .route-line {
+    position: absolute;
+    left: 9px;
+    top: 36px;
+    bottom: 36px;
+    border-left: 2px dotted rgba(23, 20, 15, 0.55);
+  }
+  .route-gap {
+    margin: 14px -12px;
+    height: 0;
+    border-top: 1.5px dotted var(--line);
+  }
+
+  /* date/time */
+  .when {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .chip {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 12px 12px 12px;
+  }
+  .chip .label { color: var(--yellow); opacity: 0.85; text-transform: uppercase; }
+  .chip .big {
+    color: var(--yellow);
+    font-weight: 900;
+    font-size: clamp(20px, 5.4vw, 23px);
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  /* driver */
+  .section-title {
+    font-weight: 900;
+    font-size: 15.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+  .driver {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .driver .right { text-align: right; }
+  .driver .name { font-weight: 800; font-size: 15.5px; margin-top: 4px; }
+
+  /* otp */
+  .otp {
+    font-weight: 900;
+    font-size: clamp(34px, 10vw, 42px);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin: 12px 0 14px;
+  }
+  .hint { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+
+  .note { font-weight: 700; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+
+  /* button */
+  .cta {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    border: 0;
+    cursor: pointer;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 18px;
+    padding: 17px 20px;
+    border-radius: 16px;
+    transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255, 201, 0, 0.22); background: #FFF9E6; }
+  .cta:active { transform: scale(0.97); box-shadow: none; }
+  .cta:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+  .cta[disabled] { cursor: default; transform: none; box-shadow: none; }
+  .cta.picked { background: var(--yellow); }
+  .cta.dim { opacity: .35; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .choices .cta { margin-top: 0; font-size: clamp(14.5px, 4vw, 17px); line-height: 1.2; padding: 16px 10px; min-height: 64px; }
+
+  .cancel-zone { position: relative; height: 92px; margin-top: 6px; transition: opacity .3s ease, height .4s ease, margin .4s ease; }
+  .cancel-zone.done { opacity: 0; pointer-events: none; height: 0; margin-top: 0; }
+  .cancel {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    color: var(--beige);
+    border: 1.5px solid rgba(189, 179, 148, 0.5);
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: left .22s cubic-bezier(.3,1.4,.5,1), top .22s cubic-bezier(.3,1.4,.5,1), transform .22s ease;
+    touch-action: none;
+  }
+
+  .confirm {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .4s ease;
+  }
+  .confirm > div { overflow: hidden; }
+  .confirm.show { grid-template-rows: 1fr; }
+  .confirm p {
+    margin-top: 14px;
+    text-align: center;
+    color: var(--cream);
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 1.35;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .4s .15s ease, transform .4s .15s ease;
+  }
+  .confirm.show p { opacity: 1; transform: none; }
+
+  @media (min-width: 700px) { .screen { padding: 24px 20px 20px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <main class="screen">
+    <h1>Your evening has been taken care of.</h1>
+
+    <section class="ticket" aria-label="Ride details">
+      <div class="route">
+        <div class="route-line"></div>
+        <div class="stop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+          <div>
+            <div class="label">Pickup</div>
+            <div class="value">New Government Colony, Bandra</div>
+          </div>
+        </div>
+        <div class="route-gap"></div>
+        <div class="stop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+          <div>
+            <div class="label">Drop</div>
+            <div class="value">Steam Room Café, Bandra</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="when">
+        <div class="chip"><div class="label">Date</div><div class="big">15 Nov</div></div>
+        <div class="chip"><div class="label">Pickup time</div><div class="big">6:45 PM</div></div>
+      </div>
+
+      <div class="sep cut"></div>
+
+      <div class="section-title">Passenger details</div>
+      <div class="driver">
+        <div><div class="label">Passenger</div><div class="name">You and me, obviously.</div></div>
+        <div class="right"><div class="label">Vehicle</div><div class="name">Rickshaw 🛺</div></div>
+      </div>
+
+      <div class="sep cut"></div>
+
+      <div class="label">Before you ride</div>
+      <div class="otp" aria-label="OTP 11:11">OTP: 11:11</div>
+      <p class="hint">Share this OTP with your driver to confirm your ride.</p>
+
+      <div class="sep cut"></div>
+
+      <div class="note"><span aria-hidden="true">🚫</span> Cancellation: Not encouraged.</div>
+    </section>
+
+    <div class="choices" id="choices">
+      <button class="cta" type="button" data-msg="Obviously. That's all I needed to hear. See you at 6:45! ☕">Obviously Yes</button>
+      <button class="cta" type="button" data-msg="Knew it. That's all I needed to hear. See you at 6:45! ☕">I know your answer is yes</button>
+    </div>
+    <div class="cancel-zone" id="zone">
+      <button class="cancel" id="cancel" type="button">Cancel</button>
+    </div>
+    <div class="confirm" id="confirm" aria-live="polite">
+      <div><p id="msg"></p></div>
+    </div>
+  </main>
+
+<script>
+  const buttons = document.querySelectorAll('.choices .cta');
+  const confirmBox = document.getElementById('confirm');
+  const msg = document.getElementById('msg');
+  const zone = document.getElementById('zone');
+  const cancel = document.getElementById('cancel');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      msg.textContent = btn.dataset.msg;
+      confirmBox.classList.add('show');
+      zone.classList.add('done');
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.add(b === btn ? 'picked' : 'dim');
+      });
+      setTimeout(resetScreen, 4000);
+    });
+  });
+
+  // After 4 seconds, put everything back so she can try the other options
+  function resetScreen() {
+    confirmBox.classList.remove('show');
+    zone.classList.remove('done');
+    cancel.style.left = '50%';
+    cancel.style.top = '50%';
+    buttons.forEach(b => {
+      b.disabled = false;
+      b.classList.remove('picked', 'dim');
+    });
+    setTimeout(() => { if (!confirmBox.classList.contains('show')) msg.textContent = ''; }, 450);
+  }
+
+  // Cancel runs away
+  function dodge() {
+    const zw = zone.clientWidth, zh = zone.clientHeight;
+    const bw = cancel.offsetWidth, bh = cancel.offsetHeight;
+    const curX = cancel.offsetLeft, curY = cancel.offsetTop;
+    let x, y, tries = 0;
+    do {
+      x = bw / 2 + Math.random() * (zw - bw);
+      y = bh / 2 + Math.random() * (zh - bh);
+      tries++;
+    } while (Math.hypot(x - curX, y - curY) < 80 && tries < 12);
+    cancel.style.left = x + 'px';
+    cancel.style.top = y + 'px';
+  }
+  ['pointerenter', 'pointerdown', 'touchstart', 'focus'].forEach(ev =>
+    cancel.addEventListener(ev, e => { if (e.cancelable) e.preventDefault(); dodge(); cancel.blur(); }, { passive: false })
+  );
+  cancel.addEventListener('click', e => { e.preventDefault(); dodge(); });
+</script>
+</body>
+</html>
